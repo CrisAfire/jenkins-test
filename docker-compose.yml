@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+
+  api: #Contenedor rust
+    image: rust:latest #Descargar de docker hub la img de rust más reciente
+    container_name: api-rust
+    ports:
+      - 8000:8000 #Usar puerto 8000 en el contenedor y relacionarlo al 8000 de la laptop
+    volumes:
+      - "./api:/app" #Copiar el proyecto a la carpeta app en el contenedor
+    working_dir: /app  #Ubicarse en app
+    command: cargo run #Correr el proyecto
+
+  bd: #Contenedor mysql
+    image: mysql:latest
+    container_name: api-mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true #Usuario sin contraseña 
+    volumes: #Script de la BD
+      - "./script.sql:/docker-entrypoint-initdb.d/script.sql" 
